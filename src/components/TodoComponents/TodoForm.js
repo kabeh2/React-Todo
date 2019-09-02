@@ -10,7 +10,9 @@ const TodoForm = props => {
         value={props.todo}
         onChange={props.onChange}
       />
-      <button type="submit">Add</button>
+      <button type="submit" disabled={props.todo === "" ? true : false}>
+        Add
+      </button>
     </form>
   );
 };
