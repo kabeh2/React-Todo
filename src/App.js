@@ -39,11 +39,26 @@ class App extends React.Component {
 
     const newTodo = { task: this.state.todo, completed: false, id: Date.now() };
 
+    // Persist todo Data by setting in Local Storage
+    localStorage.setItem(
+      "todos",
+      // localstorage can only use strings
+      JSON.stringify([...this.state.todos, newTodo])
+    );
+
     this.setState({
       todos: [...this.state.todos, newTodo],
       todo: ""
     });
   };
+
+  // Use componentDidMount to retrieve updated data
+  componentDidMount() {
+    // Retreive Persisted by getting in Local Storage and updating state
+    const todos = JSON.parse(localStorage.getItem("todos"));
+    const hideCompleted = JSON.parse(localStorage.getItem("hideCompleted"));
+    this.setState({ todos, todo: "", hideCompleted });
+  }
 
   handleClick = id => {
     // This function marks an item as completed in state with a boolean
@@ -63,11 +78,16 @@ class App extends React.Component {
       }
     });
 
+    // Persist change of completed state in todos Data by setting in Local Storage
+    localStorage.setItem("todos", JSON.stringify([...todos]));
     this.setState({ todos });
   };
 
   handleRemove = e => {
     e.preventDefault();
+
+    // Persist hideCompleted Data by setting in Local Storage
+    localStorage.setItem("hideCompleted", !this.state.hideCompleted);
 
     this.setState({ hideCompleted: !this.state.hideCompleted });
   };
